@@ -2,6 +2,8 @@
 
 **Links to [hijing1.42](https://github.com/xnwanglbnl/hijing/tree/hijing1.42) branch and [hijing2.0](https://github.com/xnwanglbnl/hijing/tree/hijing2.0) branch**
 
+ Documentation and instruction can be found here: https://github.com/xnwanglbnl/hijing/wiki
+ 
 It is expected that hard or semihard parton scatterings with transverse momentum of a few GeV are expected to dominate high energy heavy ion collisions. HIJING (Heavy Ion Jet INteraction Generator) Monte Carlo model was developed by M. Gyulassy and X.-N. Wang with special emphasis on the role of minijets in pp, pA and AA reactions at collider energies.
 Detailed systematic comparison of HIJING results with a very wide range of data demonstrates that a quantitative understanding of the interplay between soft string dynamics and hard QCD interaction has been achieved. In particular, HIJING reproduces many inclusive spectra two particle correlations, and can explain the observed flavor and multiplicity dependence of the average transverse momentum.
 
