@@ -1,0 +1,5 @@
+gfortran -O -fno-automatic  $1.f hijing2.554.f hipyset1.451.f \
+ -lnsl -lg2c \
+ -L  ./   -lkernlib -lpdflib804 -lmathlib -lpacklib \
+ -o $1.out
+

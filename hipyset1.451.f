@@ -1,13 +1,25 @@
+c  Version 1.451    Wei-Tian
+c  the size of  
+c  COMMON/HISTRNG/NFP(300,15),PPHI(300,25),NFT(300,15),PTHI(300,25)
+c  should be the same as which in HIJING
+c
+c  Version 1.45     Wei-Tian
+c  the Cronin effect codes are canceled in PYREMN. 
+C  This Cronin effect is moved to HIJHRD
+c
+c  Version 1.410    Wei-Tian
+c  Change the nuclear shadowing effect in subroutine PYSTFU as in  
+c  [arXiv:nucl-th/0110075].
+cc
+C  VERSION 1.401    Wei-Tian
+C  REMOVE a bug in subroutine PYSTFE when the mass of PROJ and TARG are not 1.
+C
+C  VERSION 1.390    Wei-Tian
+C  the subroutine PYSTFE has been changed for taking the pdf library of GRV98.
 C
 C
 C
 C     Modified for HIJING program
-c
-c     Nov. 4, 1998, modification at line 14435
-c
-c     Nov. 3, 1998, modification at line 4235
-c
-c     October 1, 1998, modification at line 13390
 c
 c    modification July 22, 1997  In pyremnn put an upper limit
 c     on the total pt kick the parton can accumulate via multiple
@@ -800,7 +812,7 @@ C...Decay products may develop a shower.
     
 C...Jet fragmentation: string or independent fragmentation. 
       ELSEIF(K(IP,1).EQ.1.OR.K(IP,1).EQ.2) THEN 
-        MFRAG=MSTJ(1)   
+        MFRAG=MSTJ(1)
         IF(MFRAG.GE.1.AND.K(IP,1).EQ.1) MFRAG=2 
         IF(MSTJ(21).GE.2.AND.K(IP,1).EQ.2.AND.N.GT.IP) THEN 
           IF(K(IP+1,1).EQ.1.AND.K(IP+1,3).EQ.K(IP,3).AND.   
@@ -1106,11 +1118,9 @@ C...Shuffle energy and momentum to put new particle on mass shell.
       HB=PECM**2+HA 
       HC=P(N+2,5)**2+HA 
       HD=P(IR,5)**2+HA
-C******************CHANGES BY HIJING in order to avoid 
-C******************invalid floating point************  
+C******************CHANGES BY HIJING************  
       HK2=0.0
       IF(HA**2-(PECM*P(IR,5))**2.EQ.0.0.OR.HB+HD.EQ.0.0) GO TO 285
-      if((HB+HC)**2-4.*(HB+HD)*P(N+2,5)**2.LT.0.0) go to 285
 C******************
       HK2=0.5*(HB*SQRT(((HB+HC)**2-4.*(HB+HD)*P(N+2,5)**2)/ 
      &(HA**2-(PECM*P(IR,5))**2))-(HB+HC))/(HB+HD)   
@@ -4235,14 +4245,8 @@ C...Check if chosen multiplet m1,m2,z1,z2 is physical.
           ISL(3-ISLM)=0 
           ISLM=3-ISLM   
         ELSEIF(ISL(1).EQ.1.AND.ISL(2).EQ.1) THEN    
-c          ZDR1=MAX(0.,V(N+1,3)/V(N+1,4)-1.) 
-c          ZDR2=MAX(0.,V(N+2,3)/V(N+2,4)-1.) 
-          ZDR1=MAX(0.,V(N+1,3)/max(V(N+1,4),1.0e-20)-1.) 
-          ZDR2=MAX(0.,V(N+2,3)/max(V(N+2,4),1.0e-20)-1.)
-c
-c*************************** modified by xnwang on Nov. 3 to avoid 
-c                            the case when V(N+1,4)=0
-c 
+          ZDR1=MAX(0.,V(N+1,3)/V(N+1,4)-1.) 
+          ZDR2=MAX(0.,V(N+2,3)/V(N+2,4)-1.) 
           IF(ZDR2.GT.RLU(0)*(ZDR1+ZDR2)) ISL(1)=0   
           IF(ISL(1).EQ.1) ISL(2)=0  
           IF(ISL(1).EQ.0) ISLM=1    
@@ -10403,7 +10407,7 @@ C...Showering of initial state partons (optional).
         IPU1=MINT(84)+1 
         IPU2=MINT(84)+2 
         IF(MSTP(61).GE.1.AND.MINT(43).NE.1.AND.ISUB.NE.95)  
-     &  CALL PYSSPA(IPU1,IPU2)  
+     &  CALL PYSSPA(IPU1,IPU2) 
         NSAV1=N 
     
 C...Multiple interactions.  
@@ -13290,11 +13294,6 @@ C...Generates spacelike parton showers.
       SAVE /PYINT2/ 
       COMMON/PYINT3/XSFX(2,-40:40),ISIG(1000,3),SIGH(1000)  
       SAVE /PYINT3/ 
-c
-      COMMON/HIPARNT/HIPR1(100),IHPR2(50),HINT1(100),IHNT2(50)
-      SAVE  /HIPARNT/
-c common block for hijing
-c
       DIMENSION KFLS(4),IS(2),XS(2),ZS(2),Q2S(2),TEVS(2),ROBO(5),   
      &XFS(2,-6:6),XFA(-6:6),XFB(-6:6),XFN(-6:6),WTAP(-6:6),WTSF(-6:6),  
      &THE2(2),ALAM(2),DQ2(3),DPC(3),DPD(4),DPB(4)   
@@ -13385,12 +13384,8 @@ C...Calculate Altarelli-Parisi and structure function weights.
 C***************************************************************
 C**********ERROR HAS OCCURED HERE
       IF(XFBO.EQ.0.0) THEN
-         if(IHPR2(10).NE.0) THEN
-            WRITE(MSTU(11),1000)
-            WRITE(MSTU(11),1001) KFLB,XFB(KFLB)
-         endif
-c*************************** if statement added by X.-N.Wang 9/25/98
-c
+                WRITE(MSTU(11),1000)
+                WRITE(MSTU(11),1001) KFLB,XFB(KFLB)
 		XFBO=0.00001
       ENDIF
 C****************************************************************    
@@ -14142,7 +14137,7 @@ C...Adds on target remnants (one or two from each side) and
 C...includes primordial kT. 
       COMMON/HIPARNT/HIPR1(100),IHPR2(50),HINT1(100),IHNT2(50)
       SAVE  /HIPARNT/
-      COMMON/HISTRNG/NFP(300,15),PPHI(300,15),NFT(300,15),PTHI(300,15)
+      COMMON/HISTRNG/NFP(300,15),PPHI(300,25),NFT(300,15),PTHI(300,25)
       SAVE  /HISTRNG/
 C...COMMON BLOCK FROM HIJING
       COMMON/LUJETS/N,K(9000,5),P(9000,5),V(9000,5)
@@ -14214,9 +14209,8 @@ c
 C
 C********this is s of the current NN collision
         IF(SS_W2.LE.4.0*PARP(93)**2) GOTO 1211
+        goto 1211   ! Deng
 c
-c
-        NT_MISS=0
         IF(IHPR2(5).LE.0) THEN
 120	     IF(MSTP(91).LE.0) THEN
                PT=0. 
@@ -14226,9 +14220,7 @@ c
                RPT1=RLU(0)   
                RPT2=RLU(0)   
                PT=-PARP(92)*LOG(RPT1*RPT2)   
-             ENDIF
-             NT_MISS=NT_MISS+1
-             IF(NT_MISS.GT.1000) GO TO 1211
+             ENDIF   
              IF(PT.GT.PARP(93)) GOTO 120 
 	     PHI=PARU(2)*RLU(0)  
 	     RPT1=PT*COS(PHI)  
@@ -14236,22 +14228,18 @@ c
 	ELSE IF(IHPR2(5).EQ.1) THEN
 	     IF(JT.EQ.1) JPT=NFP(IHNT2(11),11)
 	     IF(JT.EQ.2) JPT=NFT(IHNT2(12),11)
-1205	     PTGS=PARP(91)*SQRT(-LOG(RLU(0)))
-             NT_MISS=NT_MISS+1
-             IF(NT_MISS.GT.1000) GO TO 1211
-	     IF(PTGS.GT.PARP(93)) GO TO 1205
-	     PHI=2.0*HIPR1(40)*RLU(0)
-	     RPT1=PTGS*COS(PHI)
-	     RPT2=PTGS*SIN(PHI)
-	     DO 1210 I_INT=1,JPT-1
-		PKCSQ=PARP(91)*SQRT(-LOG(RLU(0)))
-		PHI=2.0*HIPR1(40)*RLU(0)
-		RPT1=RPT1+PKCSQ*COS(PHI)
-		RPT2=RPT2+PKCSQ*SIN(PHI)
-1210	     CONTINUE
-             NT_MISS=NT_MISS+1
-             IF(NT_MISS.GT.1000) GO TO 1211
-             IF(RPT1**2+RPT2**2.GE.SS_W2/4.0) GO TO 1205
+c1205	     PTGS=PARP(91)*SQRT(-LOG(RLU(0)))    ! Canceled by Deng
+c	     IF(PTGS.GT.PARP(93)) GO TO 1205
+c	     PHI=2.0*HIPR1(40)*RLU(0)
+c	     RPT1=PTGS*COS(PHI)
+c	     RPT2=PTGS*SIN(PHI)
+c	     DO 1210 I_INT=1,JPT-1
+c		PKCSQ=PARP(91)*SQRT(-LOG(RLU(0)))
+c		PHI=2.0*HIPR1(40)*RLU(0)
+c		RPT1=RPT1+PKCSQ*COS(PHI)
+c		RPT2=RPT2+PKCSQ*SIN(PHI)
+c1210	     CONTINUE
+c             IF(RPT1**2+RPT2**2.GE.SS_W2/4.0) GO TO 1205
 	ENDIF
 C     X.N. Wang
 C			********When initial interaction among soft partons is
@@ -14434,12 +14422,7 @@ C...Reconstruct kinematics of remnants.
       DO 200 JT=1,2 
       IF(JT.EQ.ILEP) GOTO 200   
       PE=0.5*(SHR+(PMS(JT)-PMS(3-JT))/SHR)  
-c
-c************************************** add by X.-N Wang on Nov.4 1998
-      PE=max(PE,PMS(JT))
-c**************************************
-c      PZ=SQRT(PE**2-PMS(JT))
-      PZ=SQRT(abs(PE**2-PMS(JT)))
+      PZ=SQRT(PE**2-PMS(JT))    
       IF(KFLCH(JT).EQ.0) THEN   
         P(IS(JT),4)=PE  
         P(IS(JT),3)=PZ*(-1)**(JT-1) 
@@ -18171,9 +18154,7 @@ C			********COMMON BLOCK FROM HIJING
       SAVE /PYINT1/ 
       DIMENSION XPQ(-6:6),XQ(6),TX(6),TT(6),TS(6),NEHLQ(8,2),   
      &CEHLQ(6,6,2,8,2),CDO(3,6,5,2),COW(3,5,4,2)    
-c
-      SAVE XQ, TX, TT, TS, NEHLQ, CEHLQ, CDO, COW             ! Uzhi
-c
+    
 C...The following data lines are coefficients needed in the 
 C...Eichten, Hinchliffe, Lane, Quigg proton structure function  
 C...parametrizations, see below.    
@@ -18483,6 +18464,9 @@ C...Expansion coefficients for charm quark sea distribution.
      2  6.2290E-02, -2.8920E-01,  2.4240E-01, -4.4630E+00, -8.3670E-01, 
      3 -4.0990E-02, -1.0820E-01,  2.0360E+00,  5.2090E+00, -4.8400E-02/ 
     
+      COMMON /SG1/ SG
+c**********Wei-Tian
+
 C...Euler's beta function, requires ordinary Gamma function 
       EULBET(X,Y)=PYGAMM(X)*PYGAMM(Y)/PYGAMM(X+Y)   
     
@@ -18654,7 +18638,6 @@ C...These are accessed via PYSTFE since the files needed may not always
 C...available.  
       ELSEIF(MSTP(51).GE.11.AND.MSTP(51).LE.13) THEN    
         CALL PYSTFE(2212,X,Q2,XPQ)  
-    
 C...Unknown proton parametrization. 
       ELSE  
         WRITE(MSTU(11),1200) MSTP(51)   
@@ -18727,27 +18710,54 @@ C...Check positivity and reset above maximum allowed flavour.
   250 IF(IABS(KFL).GT.MSTP(54)) XPQ(KFL)=0. 
 
 C...consider nuclear effect on the structure function
+c*********Li & Wang, nucl-th/0110075, nuclear shadowing***** Wei-Tian
       	IF((JBT.NE.1.AND.JBT.NE.2).OR.IHPR2(6).EQ.0
      &                  .OR.IHNT2(16).EQ.1) GO TO 400
       	ATNM=IHNT2(2*JBT-1)
       	IF(ATNM.LE.1.0) GO TO 400
       	IF(JBT.EQ.1) THEN
-	  BBR2=(YP(1,IHNT2(11))**2+YP(2,IHNT2(11))**2)/1.44/ATNM**0.66666
+	  BBR2=Min((YP(1,IHNT2(11))**2+YP(2,IHNT2(11))**2) 
+     &         /1.12**2/ATNM**0.66666, 1.0)
       	ELSEIF(JBT.EQ.2) THEN
-	  BBR2=(YT(1,IHNT2(12))**2+YT(2,IHNT2(12))**2)/1.44/ATNM**0.66666
+	  BBR2=Min((YT(1,IHNT2(12))**2+YT(2,IHNT2(12))**2)
+     &         /1.12**2/ATNM**0.66666, 1.0)
       	ENDIF
-      	BBR2=MIN(1.0,BBR2)
-	ABX=(ATNM**0.33333333-1.0)
-      	APX=HIPR1(6)*4.0/3.0*ABX*SQRT(1.0-BBR2)
-      	AAX=1.192*ALOG(ATNM)**0.1666666
-      	RRX=AAX*(X**3-1.2*X**2+0.21*X)+1.0
-     &		-(APX-1.079*ABX*SQRT(X)/ALOG(ATNM+1.0))*EXP(-X**2.0/0.01)
-      	DO 300 KFL=-6,6
-		XPQ(KFL)=XPQ(KFL)*RRX
-300   	CONTINUE
+        SAX=5.0/3.0*(1.0-BBR2)          
+        ABX=(ATNM**0.33333333-1.0)**0.6
+        AAX=1.192*ALOG(ATNM)**0.1666666
+        DO 300 KFL=-6,6
+          IF(KFL.NE.0)THEN
+           RRX=1.0+AAX*(X**3-1.2*X**2+0.21*X)
+     &         -0.1*SAX*ABX*(1.0-3.5*SQRT(X))*EXP(-X**2/0.01)
+          ELSEIF(KFL.EQ.0)THEN
+           RRX=1.0+AAX*(X**3-1.2*X**2+0.21*X)
+     &         -SG*SAX*ABX*(1.0-1.5*X**0.35)*EXP(-X**2/0.004)
+          ENDIF
+          XPQ(KFL)=XPQ(KFL)*RRX
+300     CONTINUE
+
+c      	IF((JBT.NE.1.AND.JBT.NE.2).OR.IHPR2(6).EQ.0
+c     &                  .OR.IHNT2(16).EQ.1) GO TO 400
+c      	ATNM=IHNT2(2*JBT-1)
+c      	IF(ATNM.LE.1.0) GO TO 400
+c      	IF(JBT.EQ.1) THEN
+c	  BBR2=(YP(1,IHNT2(11))**2+YP(2,IHNT2(11))**2)/1.44/ATNM**0.66666
+c      	ELSEIF(JBT.EQ.2) THEN
+c	  BBR2=(YT(1,IHNT2(12))**2+YT(2,IHNT2(12))**2)/1.44/ATNM**0.66666
+c      	ENDIF
+c      	BBR2=MIN(1.0,BBR2)
+c	ABX=(ATNM**0.33333333-1.0)
+c      	APX=HIPR1(6)*4.0/3.0*ABX*SQRT(1.0-BBR2)
+c      	AAX=1.192*ALOG(ATNM)**0.1666666
+c      	RRX=AAX*(X**3-1.2*X**2+0.21*X)+1.0
+c     &		-(APX-1.079*ABX*SQRT(X)/ALOG(ATNM+1.0))*EXP(-X**2.0/0.01)
+c      	DO 300 KFL=-6,6
+c		XPQ(KFL)=XPQ(KFL)*RRX
+c300   	CONTINUE
 C			********consider the nuclear effect on the structure
 C				fucntion which also depends on the impact
 C				parameter of the nuclear reaction
+c******************************************************************
 
 400   	CONTINUE    
 C...Formats for error printouts.    
@@ -19536,9 +19546,77 @@ C...that the event has passed the cuts, MCUT=1 that it has failed.
       RETURN    
       END   
     
+C******This subroutine is to supply the pdf by users 
+C******Wei-Tian
+      SUBROUTINE PYSTFE(KF,XIN,Q2,XPQ)
+C...This is a dummy routine, where the user can introduce an interface  
+C...to his own external structure function parametrization. 
+C...Arguments in:   
+C...KF : 2212 for p, 211 for pi+; isospin conjugation for n and charge  
+C...    conjugation for pbar, nbar or pi- is performed by PYSTFU.   
+C...X : x value.    
+C...Q2 : Q^2 value. EFRM=
+C...Arguments out:  
+C...XPQ(-6:6) : x * f(x,Q2), with index according to KF code,   
+C...    except that gluon is placed in 0. Thus XPQ(0) = xg, 
+C...    XPQ(1) = xd, XPQ(-1) = xdbar, XPQ(2) = xu, XPQ(-2) = xubar, 
+C...    XPQ(3) = xs, XPQ(-3) = xsbar, XPQ(4) = xc, XPQ(-4) = xcbar, 
+C...    XPQ(5) = xb, XPQ(-5) = xbbar, XPQ(6) = xt, XPQ(-6) = xtbar. 
+C...    
+      COMMON/HIPARNT/HIPR1(100),IHPR2(50),HINT1(100),IHNT2(50)
+      COMMON/HIJCRDN/YP(3,300),YT(3,300)
+C           *************************COMMON BLOCK FROM HIJING
+      CHARACTER*20 PARM(20)
+      DIMENSION VALUE(20)
+      DOUBLE PRECISION  VALUE
+      DOUBLE PRECISION  QCDL4,QCDL5,TMAS,XMIN,XMAX,Q2MIN,Q2MAX
+      DOUBLE PRECISION SCALE,UPV,DNV,USEA,DSEA,STR,CHM,BOT,TOP,GL,X
+      COMMON/W50511a/NATYPE,NAGROUP,NASET
+      INTEGER A
+      COMMON/W50513/XMIN,XMAX,Q2MIN,Q2MAX
+      COMMON/W50512/QCDL4,QCDL5
+      COMMON/W50511/NPTYPE,NGROUP,NSET,MODE,NFL,LO,TMAS
+      DIMENSION XPQ(-6:6)  
+      COMMON /SG1/ SG
+C************************************
+       COMMON/PV/PDFVALUE1,PDFVALUE2,PDFVALUE3
+       INTEGER PDFVALUE1,PDFVALUE2,PDFVALUE3
+C*****************************                      
+      IF (KF.NE.2212) THEN
+         WRITE(*,*) 'particle type not available for strc func'
+         STOP
+      ELSE
+      ENDIF
+C ****************
+      CALL PDFVALUE
+      PARM(1)='NPTYPE'
+      PARM(2)='NGROUP'
+      PARM(3)='NSET'
+      VALUE(1)=PDFVALUE1
+      VALUE(2)=PDFVALUE2
+      VALUE(3)=PDFVALUE3
+      CALL PDFSET(PARM,VALUE)
+      SCALE=SQRT(Q2)
+      X=XIN
+      CALL STRUCTM(X,SCALE,UPV,DNV,USEA,DSEA,STR,CHM,BOT,TOP,GL)
+C ******************Put into the output arrays
+      XPQ(0)=GL
+      XPQ(1)=DNV+DSEA
+      XPQ(2)=UPV+USEA
+      XPQ(3)=STR
+      XPQ(4)=CHM
+      XPQ(5)=BOT
+      XPQ(6)=TOP
+      XPQ(-1)=DSEA
+      XPQ(-2)=USEA
+      XPQ(-3)=STR
+      XPQ(-4)=CHM
+      XPQ(-5)=BOT
+      XPQ(-6)=TOP
+      END
 C*********************************************************************  
     
-      SUBROUTINE PYSTFE(KF,X,Q2,XPQ)    
+      SUBROUTINE PYSTFE_OLD(KF,X,Q2,XPQ)    
     
 C...This is a dummy routine, where the user can introduce an interface  
 C...to his own external structure function parametrization. 
@@ -19579,9 +19657,7 @@ C...by removing C* at the beginning of some of the lines below.
      &'CBAR ','BBAR ','TBAR '/  
       DATA HEADER/'Tung evolution package has been invoked'/    
       DATA INIT/0/  
-c
-      SAVE XFDFLM,INIT                                     ! Uzhi
-c
+    
 C...Proton structure functions from Diemoz, Ferroni, Longo, Martinelli. 
 C...Allowed variable range 10 GeV2 < Q2 < 1E8 GeV2, 5E-5 < x < .95. 
       IF(MSTP(51).GE.11.AND.MSTP(51).LE.13.AND.MSTP(52).LE.1) THEN  
