@@ -1,0 +1,841 @@
+<html>
+<head>
+<title>HIJING Documentation</title>
+<link rev="made" href="mailto:xnwang@lbl.gov">
+<meta http-equiv="Keywords" content="Documentation">
+</head>
+<body bgcolor=#abcabc>
+<!-- <body background="/images/spirbind.gif">-->
+<center>
+<A NAME=main> <h3>HIJING Documentation</h3> </A>
+<A HREF="ftp://nsdssd.lbl.gov/pub/xnwang/hijing/documentation.ps">
+(Postscript file of the extended LaTex version)</A>
+
+<hr size="4">
+</center>
+
+<DL>
+<DD>  <img src="../icons/ball_green_icon.gif"> 
+     <A HREF="#information"> 
+     <B> General information </B> </A> 
+</DL>
+
+
+<DL>
+<DD> <img src="../icons/ball_green_icon.gif">
+     <A HREF="#subroutines"> 
+     <B> Main Subroutines </B> </A> 
+</DL>
+
+<DL>
+<DD> <img src="../icons/ball_green_icon.gif">
+     <A HREF="#mainblock"> 
+     <B> Main Data Blocks </B> </A> 
+</DL>
+
+<DL>
+<DD> <img src="../icons/ball_green_icon.gif">
+     <A HREF="#options"> 
+     <B> Event Options and Parameters </B> </A> 
+</DL>
+
+<DL>
+<DD> <img src="../icons/ball_green_icon.gif">
+     <A HREF="#example"> 
+     <B> Example Program </B> </A> 
+</DL>
+
+<DL>
+<DD> <img src="../icons/ball_green_icon.gif">
+     <A HREF="#history"> 
+     <B> History of Updates </B> </A>
+</DL>
+
+<hr size="4">
+<h5>
+Last modified on February 11, 1997 by 
+<a href="../index.html" target="_parent">Xin-Nian Wang</a>
+</h5>
+<br>
+
+<h4>
+ <A NAME=information> General Information </A>
+</h4>
+
+	HIJING basically is designed to simulate multiple jets 
+	and particle production in pp, pA or AA collisions. PYTHIA
+	subroutines and Lund jet fragmentation scheme are used. Therefore,
+	this program uses the same particle identification code as JETSET.72.
+	Users can also use subroutines in JETSET.72 and change the values
+	of parameters in JETSET.72 and PYTHIA therein. But there are some
+	special parameters in HIJING which users have to specify or change.
+	This is the  first version. Things may change in the future.
+	If you find any bugs or problems please report them to the authors.
+	This file contains a example program and all the HIJING subroutines.
+	To save compiling time, JETSET.7.2 is not included in HIJING. To 
+	meet some specific needs of HIJING, JETSET.72 has been modified and
+	renamed as HIPYSET. One should link HIJING with HIPYSET and the main
+	program:
+	<br>
+
+	link yourmain,hijing,hipyset
+
+<h4>
+ <A NAME=subroutines> Main Subroutines </A>
+<A HREF="#main"> (Go back to the main manual) </A>
+</h4>
+	
+	
+
+
+	There are two subroutines in HIJING which users have to call:
+<br><br>
+	SUBROUTINE  HIJSET(EFRM,FRAME,PROJ,TARG,IAP,IZP,IAT,IZT)
+<br>
+<DL>	
+<DT>		Purpose: 
+<DD>	This subroutine is to initialize HIJING which should 
+			be called first before any subroutine.<br> 
+<DT>		EFRM(GeV): 
+<DD> is the colliding energy in the frame specified by FRAME.
+<DT>		FRAME:	(must be 'LAB' or 'CMS') 
+<DD>	to specify the frame of the collision
+<DT>		PROJ,TARG:
+<DD>	Character variables of proj and targ particles.
+<DD>			='P' proton
+<DD>			='PBAR' anti-proton
+<DD>			='N' neutron
+<DD>			='NBAR' anti-neutron
+<DD>			='PI+' positive pion
+<DD>			='PI-' negative pion
+<DD>			='K+' positive kaon
+<DD>			='K-' negative kaon
+<DD>			='A' nucleus
+<DT>		IAP,IAT:
+<DD>	 mass number of the projectile and target nuclei, set to 1 for hadrons
+<DT>		IZP,IZT: 
+<DD>	charge number of the projectile and target nuclei,for
+			hadrons it is the charge of that hadron(=1,0,-1)
+</DL>
+	SUBROUTINE  HIJING(FRAME,BMIN,BMAX)
+<DL><DT>	Purpose: 
+<DD>	This is the main program of HIJING which can be 
+			called(many times) only after HIJSET is called once. 
+<DT>		FRAME:	(must be 'LAB' or 'CMS') 
+<DD>	to specify the frame of the collision
+<DT>		BMIN,BMAX: 
+<DD>	are the low and up limits bewteen which the impact
+			parameters are randomly but evenly selected for pA and
+			AA collisions. For pp collisions, the events are
+			averaged over all impact parameters.
+</DL> 
+
+	<br><br>
+	<A HREF="#main"> <B> Go back to the main manual </B> </A>
+
+<h4>
+ <A NAME=mainblock> Main Data blocks </A>
+<A HREF="#main"> (Go back to the main manual) </A>
+</h4>
+
+		There are mainly three common blocks which provide users with
+		important information of the generated events.
+<br><br>
+	COMMON /HIMAIN1/ NATT,EATT,JATT,NT,NP,N0,N01,N10,N11
+<br>
+	COMMON /HIMAIN2/KATT(130000,4),PATT(130000,4)
+<br><br>
+		These give information of interaction and produced particles.
+<br>
+<DL><DT>	NATT: 
+<DD>	total number of produced stable particles of the current event. 
+<DT>		EATT: 
+<DD>	the total c.m.s energy of the produced particles to check 
+			energy conservation.
+<DT>		JATT: 
+<DD>	the total number of jet-pairs in the current event.
+<DT>		NT,NP: 
+<DD>	number of wounded target and projetile nucleons.
+<DT>		N0,N01,N10,N11:
+<DD>	number of N-N,N-N_wounded,N_wounded-N, and
+			N_wounded-N_wounded collisions in the current event.
+<DT>		KATT(I,1)(I=1,NATT): 
+<DD>	partilce ID of the I_th produced particle.
+			Users have to refer to JETSET7.2 for identifying
+			particles with their ID's.(See the end of this 
+			documentation)
+<DT>		KATT(I,2)(I=1,NATT):
+<DD>	This is a code to identify the sources
+			from which the particle comes.
+<DD>			=0  projectile which has not interacted at all
+<DD>			=1  projectile which only suffers an elastic collision
+<DD>			=2  from the diffractive projectile in a single 
+				diffractive interaction
+<DD>			=3  from the fragmentation of projectile strings 
+<DD>			=10 target which has not interacted at all
+<DD>			=11 target which only suffers an elastic collision
+<DD>			=12 from the diffractive target in a single diffractive
+				interaction
+<DD>			=13 from the  fragmentation of target strings
+<DD>			=20 from hard scattered partons which form string
+				systems themselves.
+<DD>			=30 from soft sea-quarks strings
+<DD>			=40 from direct production in the hard processes(
+				currently,only direct photons are included).
+<DT>		KATT(I,3)(I=1,NATT): 
+<DD>	The line number of the parent particle.
+			For finally produced or directly produced (not from
+			the decay of another particle) particles, it is set
+			to 0 (The option to retain the information of all
+			particles including the decayed ones is IHPR2(21)=1).
+<DT>		KATT(I,4)(I=1,NATT): 
+<DD>	Status number of the particle:
+<DD>			=1  finally or directly produced particles.
+<DD>			=11 particles which has already decayed.
+<DT>		PATT(I,1:4)(I=1,NATT): 
+<DD>	four-momentum of I_th produced particle.
+</DL>
+
+<DL>
+<DT>	COMMON/HIJJET1/NPJ(300),KFPJ(300,500),PJPX(300,500),PJPY(300,500)
+<DD>    	,PJPZ(300,500),PJPE(300,500),PJPM(300,500)
+<DD>    	,NTJ(300),KFTJ(300,500),PJTX(300,500),PJTY(300,500)
+<DD>    	,PJTZ(300,500),PJTE(300,500),PJTM(300,500)
+</DL>
+		This common block contains information about produced
+			partons which are connected with the leading quarks 
+			and diquarks of projectile or target to form a string 
+			system	for fragmentation.
+<DL><DT>	NPJ(I)(I=1,IAP): 
+<DD>	number of partons associated with I_th 	projectile
+<DT>		KFPJ(I,J)(J=1,NPJ(I)): 
+<DD>	parton ID of the J_th parton associated with I_th projectile.
+<DT>		PJPX(I,J),PJPY(I,J),PJPZ(I,J),PJPE(I,J),PJPM(I,J): 
+<DD>	the four momentum and rest mass of J_th parton associated with
+			the I_th projectile
+<DT>		NTJ(I)(I=1,IAT):
+<DD>	number of partons associated with I_th  target
+<DT>		KFTJ(I,J)(J=1,NTJ(I)): 
+<DD>	parton ID of the J_th parton associated
+			with I_th target.
+<DT>	PJTX(I,J),PJTY(I,J),PJTZ(I,J),PJTE(I,J),PJTM(I,J): 
+<DD>	the four momentum and rest mass of J_th parton associated with
+			the I_th target.
+</DL>
+
+<DL><DT>COMMON/HIJJET2/NSG,NJSG(900),IASG(900,3),K1SG(900,100),K2SG(900,100)
+<DD>    ,PXSG(900,100),PYSG(900,100),PZSG(900,100),PESG(900,100),PMSG(900,100)
+</DL>
+	This common block contains information about the partons which
+	form string systems themselves without be connected to leading 
+	quarks and diquarks.
+
+<DL><DT>	NSG: 
+<DD>	the total number of such string systems.
+<DT>		NJSG(I)(I=1,NSG): 
+<DD>	number of partons in the I_th string system.
+<DT>		IASG(I,1),IASG(I,2): 
+<DD>	specify which projetile and target produce
+			the I_th string system
+<DT>		IASG(I,3):=0 
+<DD>	the jets will be quenched
+			   1 the jets will not be quenched
+<DT>		K1SG(I,J)(J=1,NJSG(I)): 
+<DD>	color flow information of J_th parton
+			in the I_th string system.
+<DT>		K2SG(I,J)(J=1,NJSG(I)): 
+<DD>	ID code of J_th parton in I_th string.
+<DT>		PXSG(I,J),PYSG(I,J),PZSG(I,J),PESG(I,J),PMSG(I,J): 
+<DD>	four momentum and rest mass of the J_th parton in the I_th
+			string system. 
+</DL>
+
+        COMMON/HISTRNG/NFP(300,15),PP(300,15),NFT(300,15),PT(300,15)
+<BR><BR>
+	This common block contains information about the projectile
+	and target and the corresponding constituent quarks, diquarks.
+
+<DL><DT>	NFP(K,1):flavor of quark in projectile.
+<DT>		NFP(K,2):flavor of diquark in projectile.
+<DT>		NFP(K,3):present particle ID of the projectile.
+<DT>		NFP(K,4):original particle ID of projectile.
+<DT>		NFP(K,5):collision status of projectile
+<DD>			=0:no collision;
+<DD>			=1:elastic;
+<DD>			=2:the diffractive one in a single-diffractive
+<DD>			=3:beccomes excited string after an inelastic
+<DT>		NFP(K,6):
+<DD>	is the total number of jet production associated 
+			with ths projectile. if NFP(K,6)<0 it can not 
+			produce jet anymore due to energy conservation.
+<DT>		NFP(K,10):
+<DD>	to indicate whether the valence quarks or
+			diquarks has had a hard scattering,
+<DD>			=0: have no hard scattering;
+<DD>			=1,-1: has or had a hard scattering.
+<DT>		NFP(K,11):
+<DD>	total number of interactions this projectile
+			 has suffered so far.
+<DT>		PP(K,1),PP(K,2),PP(K,3),PP(K,4),PP(K,5): 
+<DD>	four momentum and
+			the invariant mass (Px,Py,Pz,E,M) of the projectile.
+<DT>		PP(K,6),PP(K,7):transverse momentum (Px,Py) of the quark.
+<DT>		PP(K,8),PP(K,9):transverse momentum (Px,Py) of the diquark.
+<DT>		PP(K,10),PP(K,11),PP(K,12):
+<DD>	three momentum (Px,Py,Pz) the 
+			quark or diquark has from the last hard scattering 
+			it suffered.
+<DT>		PP(K,14):the mass of the projectile quark.
+<DT>		PP(K,15):the mass of the projectile diquark.
+<DT>		NFT(K,1-15),PT(K,1-15): 
+<DD>	are about the same information of
+		target and target quarks, diquarks.
+</DL>
+
+	<br><br>
+	<A HREF="#main"> <B> Go back to the main manual </B> </A>
+
+<h4>
+ <A NAME=options>Event Options and Parameters </A>
+<A HREF="#main"> (Go back to the main manual) </A>
+</h4>
+
+	COMMON/HIPARNT/HIPR1(100),IHPR2(50),HINT1(100),IHNT2(50)
+<br><br>
+	This  common block contains most of  HIJING input parameters, 
+	switchs (HIPR1,IHPR2) and event information (HINT1,IHNT2). The 
+	defualt values are given by D.
+
+<DL><DT>	HIPR1(1):(D=1.5 GeV)
+<DD>	Minimum value for the invariant mass of 
+			the excited string system in a hadron-hadron 
+			interaction.
+
+<DT>		HIPR1(2):(D=0.35 GeV)<DD>width of the Gaussian pt distribution of 
+			hadron in string fragmenation.
+<DT>		HIPR1(3),HIPR1(4):(D=0.5,0.9 GeV**-2)<DD> give the a and b 
+			parameters of the symmetric LUND fragmentatin fuction.
+<DT>		HIPR1(5):(D=2.0)<DD> cut-off for the QCD radiation, string system 
+			with invariant mass below it will not radiate soft 
+			gluons.
+<DT>		HIPR1(6):(D=0.1)<DD> The shadowing of structure fucntion at x=0
+			is parametrized as HIPR1(6)*(A**(1/3)-1.0)
+<DT>		HIPR1(7):not used
+<DT>		HIPR1(8):(D=2.0 GeV) Minimum pt of hard or semihard scatterings.
+<DT>		HIPR1(9):(D=-1.0 GeV) 
+<DD>		Maximum pt of hard or semihard 
+			scatterings, if negative there is no  up-limit.
+<DT>		HIPR1(10):(D=-2.25 GeV) <DD>To specify the value of PT for one hard
+			scattering generated per event(we call them sample 
+			jets), which could be used to study jet in AA 
+			collision. If HIPR1(10) is negtive, its absolute value
+			gives the low limit of the PT of the sample jets.  
+<DT>		HIPR1(11):(D=2.0 GeV)<DD> Minimum pt of a jet which will interact 
+			with excited nuclear matter, or when the pt of a jet 
+			is smaller than HIPR1(11) it will stop interacting 
+			further more.
+<DT>		HIPR1(12):(D=1.0 fm)<DD>The transverse distance between a 
+			traversing jet and an excited nucleon(or string system)
+ 			below which they will interact and the jet will lose 
+			energy and momentum to the nucleon.
+<DT>		HIPR1(13):(D=1.0 fm)<DD>The mean free path of a jet to interact 
+			when it goes through an excited nuclear matter.
+<DT>		HIPR1(14):(D=2.0 GeV/fm) 
+<DD>	The string tension of a gluon jet. 
+			It is the energy loss dE/dx=HIPR1(14) of the gluon 
+			jet when the string is streched. For quark jet 
+			dE/dx=0.5*HIPR1(14).
+<DT>		HIPR1(15):(D=0.2 GeV) <DD>the momentum scale lamda in the 
+			calculation of alpha_strong.
+<DT>		HIPR1(16):(D=2.0 GeV) <DD>The initial mometum scale Q0 for the 
+			evolution of the structure fuction.
+<DT>		HIPR1(17):(D=2.0) <DD>K factor for the differential jet cross 
+			sections.
+<DT>		HIPR1(18):(D=0.2)<DD> Fractional probability for color flip 
+			occuring to sea quarks among inelatic events in 
+			the DPM-like option. 
+<DT>		HIPR1(19),HIPR1(20):(D=0.1,1.6 GeV)<DD> The pt kick from the 
+			initial and final state interaction will follow 
+			1/(HIPR1(19)**2+pt**2)/(HIPR1(20)**2+pt**2)
+			distribution. HIPR1(19) regularizes the singularity 
+			at pt=0 and HIPR1(20) gives the scale beyond which
+			the distribution will be like 1/pt**4.
+<DT>		HIPR1(21):(D=1.6 GeV)<DD> The maximum pt for the pt kick per 
+			initial or final state interaction. Beyond this value
+			the pt_kick-HIPR1(21) will follow the same Gaussion 
+			distribution given by HIPR1(2).
+<DT>		HIPR1(22):(D=2.0 GeV)<DD> The form factor parameter to supress 
+			the diquarks from having a pt transfer relative to the
+			quarks,1/(1+pt**2/HIPR1(22)**2).
+<DT>		HIPR1(23)-HIPR1(28):not used.
+<DT>		HIPR1(29):(D=0.4 fm) <DD>the minimum distance between two nucleons
+ 			inside a nucleus when the coordinates of all the
+			nucleons in a nucleus are initialized.
+<DT>		HIPR1(30):(D=2*HIPR1(31)=57.0 bm) <DD>the inclusive cross 
+			section sigma_s for soft interaction. The default
+			value sigma_s=sigma_0 is used to insure the geometrical
+			scaling of pp interaction cross section at low
+			energies.
+<DT>		HIPR1(31):(D=28.5 bm) <DD>the cross section sigam_0 which 
+			characterizes the geometrical size of a nucleon
+			(HIPR1(31)=pi*b0**2). The default value is only
+			for high-energy limite(sqrt{s}>200 GeV). At lower
+			energies, a slight decrease which depends on energy
+			is parametrized in the program. The default value
+			of the above two parameters HIPR1(30),HIPR1(31) are
+			only for NN type interactions. For other kinds
+			of projectile or target hadrons users should
+			change these values so that a correct inelastic 
+			and total cross section HINT1(12),HINT1(13) are
+			obtained by the program. 
+<DT>		HIPR1(32):(D=3.90) <DD>The parameter in the scaled eikonal function 
+			of nucleon Xi(R)=A**2*(A*R)**3*K3(A*R),A=HIPR1(32) 
+			which is a Fourier transform of a dipole formtor 
+			1/(1+Q**2/mu**2)**2 and A=mu*b0 and pi*b0**2=HIPR1(31).
+<DT>		HIPR1(33):<DD>fractional cross section of single-diffractive
+			interaction.(parametrized)
+<DT>		HIPR1(34):<DD>Maximum radial coordinator for projectile 
+			nucleons to be given by the initialzation program 
+			HIJSET.
+<DT>		HIPR1(35):<DD>Maximum radial coordinator for target 
+			nucleons to be given by the initialzation program 
+			HIJSET.
+<DT>		HIPR1(36)-HIPR1(39):not used
+<DT>		HIPR1(40):(D=3.141592654) value of pi.
+<DT>		HIPR1(41):not used
+<DT>		HIPR1(42):(D=0.4)<DD>parameter in the expotnetial pt distribution
+			of sea quarks production in DPM option
+<DT>		HIPR1(43):(D=0.01) <DD>The fractional energy error relative to the 
+			colliding energy permitted per nucleon-nucleon
+			collisions.
+<DT>		HIPR1(44),HIPR1(45),HIPR1(46):(D=1.5,0.1,0.25) <DD>These 
+			parameters give the x distribution of valence quarks 
+			(1-x)**HIPR1(44)/(x**2+HIPR1(45)**2/s)**HIPR1(46)
+			for baryons, and  1/(x**2+HIPR1(45)**2/s)**HIPR1(46)/
+			((1-x)**2+HIPR1(45)**2/s)**HIPR(46) for mesons, in
+			soft interactions.
+<DT>		HIPR1(47),HIPR1(48):(D=0.0,0.5) <DD>These two parameters give
+			x distribution of the sea quarks
+			(1-x)**HIPR1(47)/(x**2+HIPR1(45)**2/s)**HIPR1(48),
+			in a soft interaction. The same is used for the 
+			the distribution of the invariant mass of the 
+			disassociated nucleon in a single diffractive
+			collision.
+<DT>		HIPR1(49)-HIPR1(100):not used.
+
+<br><br>
+<DT>		IHPR2(1):(D=1)<DD>switch for dipole-approximated QCD radiation 
+			of the string system in soft interaction. 
+<DT>		IHPR2(2):(D=3)<DD>switch for initial and final state radiation in 
+			the hard scattering.
+<DD>			=0: both initial and final radiation off;
+<DD>			=1: initial radiation on and final radiation off;
+<DD>			=2: initial radiation off and final radiation on;
+	<DD>		=3: both initial and final radiation on.
+<DT>		IHPR2(3):(D=0)<DD>switch for one hard scattering with specified PT
+			PT=HIPR1(10) per event.
+<DD>			=1:ordinary hard processes;
+<DD>			=2:only direct photon production.
+<DD>			=3:heavy quark production (charm IHPR2(18)=0 or 
+			beauty IHPR2(18)=1). For inclusive production,
+			one should reset HIPR1(10)=0.0. One can also trig 
+			larger pt QQbar production by giving HIPR1(10) a 
+			nonvanishing value. The mass of the heavy quark 
+			in the calculation of the cross section 
+			(HINT1(59)--HINT1(65)) is given by HIPR1(7) 
+			(the default is the charm mass D=1.5). We also 
+			include a separate K-factor for heavy quark and 
+			direct photon production by HIPR1(23)(D=2.0).
+
+<DT>		IHPR2(4):(D=1)<DD>switch for jet quenching in the the exicited 
+			nuclear matter,i.e. jets only interact with those 
+			nuclear matter that has suffered collisions.
+<DT>		IHPR2(5):(D=1)<DD>switch for the pt kick due to soft initial state 
+			interaction both for valence quarks or diquarks and 
+			gluons.
+<DT>		IHPR2(6):(D=1)<DD>switch for the nuclear effect on the parton 
+			distribution function.
+<DT>		IHPR2(7):(D=1)(1 or 2) <DD>selection of Duke-Owns parametrization 
+			set of nucleon structure function.
+<DT>		IHPR2(8):(D=10)<DD>The maximum number of jet production per 
+			nucleon-nucleon interaction. When IHPR2(8)=0, jet
+			production will be turned off. When IHPR2(8)<0, the
+			number of jets production will be fixed for each
+			NN collision at a value of abs(IHPR2(8)).
+<DT>		IHPR2(9):(D=0)<DD>The switch to guarrantee at leat one minijet
+			production per event(pp,pA or AA).
+<DT>		IHPR2(10):(D=0)<DD> Option to print error warning messages that 
+			might happen. When a fatal error happens the current
+			event will be abandoned and a new one is generated.
+<DT>		IHPR2(11):(D=1) <DD>Choice of baryon production model.
+	<DD>		=0 no baryon-antibaryon pair production,
+			   initial diquark treated as a unit.
+	<DD>		=1 diquark-antidiquark pair production allowed, initial
+			   diquark treated as a unit.
+	<DD>		=2 diquark-antidiquark pair production allowed, with the
+			   possibility for diquark to be split according to the
+			   "popcorn" scheme.(see the menu of jetset72)
+<DT>		IHPR2(12):(D=1)<DD>Option to turn off the decay of partiles
+			such as pi0,K0S,D+-,Lampda,Sigma+-,X-0,Omega-.
+<DT>		IHPR2(13):(D=1)Option to turn on single diffractive reactions.
+<DT>		IHPR2(14):(D=1)Option to turn on elastic scattering
+<DT>		IHPR2(15 - 17):not used
+<DT>		IHPR2(18):(D=0)<DD>option to switch on B-quark production. Charm
+                        production is the default. When B-quark production is
+                        on, charm quark production is automatically off.
+<DT>		IHPR2(19):(D=1)Option to turn on initial state interaction
+<DT>		IHPR2(20):(D=1)<DD>Option to turn off(IHPR2(20)=0) the fragmentation.
+<DT>		IHPR2(21):(D=0)<DD>Option to retain the information of all
+			particles including those which have decayed
+			and the decay chain. The line number of the
+			parent particle is KATT(I,3). The status
+			of a partcile, whether it is a finally produced
+			particle (KATT(I,4)=1) or a decayed particle
+			(KATT(I,4)=11).
+<DT>		IHPR2(22)-IHPR2(50): not used.
+
+<br><br>
+
+<DT>		HINT1(1):(GeV)<DD> The center-of-mass energy per nucleon-nucleon 
+			collision.
+<DT>		HINT1(2): <DD>The Lorenze transform variable beta from LAB to CM 
+			frame of nucelon nucleon collisions.
+<DT>		HINT1(3):The rapidity of the CM frame beta=tang(ycm).
+<DT>		HINT1(4):The rapidity of projectile y_proj.
+<DT>		HINT1(5):The rapidity of target y_targ.
+<DT>		HINT1(6):(GeV)The energy of projectile in the chosen frame.
+<DT>		HINT1(7):(GeV)The energy of target in the chosen frame.
+<DT>		HINT1(8):(GeV)The rest mass of projectile particles
+<DT>		HINT1(9):(GeV)The rest mass of target particles.
+<DT>		HINT1(10):(mb) <DD>The averaged cross section for jet production
+			per nucleon-nucleon collisions of the nuclear 
+			interaction(When very small compared to the total
+			nucleon-nucleon cross section this is very close
+			to the jet inclusive cross section HINT1(11)).
+<DT>		HINT1(11):(mb) <DD>The averaged inclusive cross section for jet
+			production per nucleon-nucleon collisions of the 
+			nuclear interaction.
+<DT>		HINT1(12):(mb) <DD>The averaged inelastic cross section of 
+			nucleon-nucleon collisions.
+<DT>		HINT1(13):(mb) <DD>The averaged total cross section of nucleon 
+			nucleon collisions.
+<DT>		HINT1(14):(mb) <DD>The jet production cross section without
+			shadowing effect.
+<DT>		HINT1(15):(mb)<DD>The cross section to account for the projectile 
+			shadowing correction term in the jet cross section.
+<DT>		HINT1(16):(mb)<DD>The cross section to account for the target 
+			shadowing correction term in the jet cross section.
+<DT>		HINT1(17):(mb)<DD>The cross section to account for the cross
+			term of shadowing correction in the jet cross section.
+<DT>		HINT1(18):(mb)<DD>The cross section for jet production for
+			the latest nucleon-nucleon collisions which
+			depends on the impact parameters(i.e. HINT1(18)=
+			HINT1(14)-a1*HINT1(15)-a2*HINT1(16)+a1*a2*HINT1(17)).
+<DT>		HINT1(19):(fm) The imapct parameter of the latest event.
+<DT>		HINT1(20):(rad)The orientation of the latest collision.
+<DT>		HINT1(21)-HINT1(25):<DD>the three momenta, energy and mass of the 
+			first scattered parton in the specified hard collision
+ 			per event with specified PT (This is before the final
+			state radiation but after the initial state radiation).
+<DT>	        HINT1(26)-HINT1(29): <DD>The total momentum and energy of the 
+			partons in the specified hard collision from the 
+			final state radiation of the first
+			scattered parton which are a little different from
+			HINT1(21)-HINT1(24) due to the rearrangement of
+			the parton showers with energy and momentum 
+			conservation.
+<DT>		HINT1(30):not used.
+<DT>		HINT1(31)-HINT1(35):<DD>the three momenta, energy and mass of the 
+			second scattered parton in the specified hard collision
+			per event with specified PT (This is before the final
+			state radiation but after the initial state radiation).
+<DT>		HINT1(36)-HINT1(39):<DD>The total momentum and energy of the 
+			partons in the specified hard collision from the 
+			final state radiation of the second
+			scattered parton which are a little different from
+			HINT1(31)-HINT1(34) due to the rearrangement of
+			the parton showers with energy and momentum 
+			conservation. 
+<DT>		HINT1(40):not used.
+<DT>		HINT1(41)-HINT1(45)<DD>the three momenta, energy and mass of the 
+			first scattered parton in the latest hard collision 
+			of the latest event.
+<DT>		HINT1(46): <DD>PT of the first scattered parton in the latest hard
+ 			collision of the latest event.
+<DT>		HINT1(47)-HINT1(50):<DD>The total momentum and energy of the 
+			partons in the latest hard collision from the 
+			final state radiation of the second
+			scattered parton which are a little different from
+			HINT1(41)-HINT1(44) due to the rearrangement of
+			the parton showers with energy and momentum 
+			conservation.
+<DT>		HINT1(51)-HINT1(55)<DD>the three momenta, energy and mass of the 
+			second scattered parton in the latest hard collision 
+			of the latest event.
+<DT>		HINT1(56): <DD>PT of the second scattered parton in the latest 
+			hard collision of the latest event.
+<DT>		HINT1(57):<DD>Correction factor for cross section of parton_nucleon
+			interactins due to processes below pt<pt_cut(HIPR1(8)).
+<DT>		HINT1(58):(mb) <DD>The averaged cross section of a parton
+			scattering off a nucleon which is used to simulate
+			initial state interaction.
+<DT>		HINT1(59):(mb) <DD>The averaged total cross section of the 
+			triggered jet production with specified P_T by 
+			HIPR1(10)(and switch by IHPR2(3))(usually, it is
+			very close to the inclusive cross section HINT1(60)
+			when the later is very small).
+<DT>		HINT1(60):(mb)<DD>The averaged inclusive cross section of the 
+			triggered jet production with specified P_T by 
+			HIPR1(10)(and switch by IHPR2(3)).
+<DT>		HINT1(61):(mb) <DD>The trigger jet production cross section without
+			shadowing effect.
+<DT>		HINT1(62):(mb)<DD>The cross section to account for the projectile 
+			shadowing correction term in the trigger jet cross 
+			section.
+<DT>		HINT1(63):(mb)<DD>The cross section to account for the target 
+			shadowing correction term in the trigger jet cross 
+			section.
+<DT>		HINT1(64):(mb)The cross section to account for the cross
+			term of shadowing correction in the trigger jet 
+			cross section.
+<DT>		HINT1(65):(mb)<DD>The inclusive cross section for latest trigger
+			jet production which depends on the impact parameters
+			(i.e. HINT1(65)=HINT1(61)-a1*HINT1(62)-a2*HINT1(63)
+			+a1*a2*HINT1(64)).
+<DT>		HINT1(67)-HINT1(70):<DD>The total momentum and energy of the 
+			partons in the latest hard collision from the 
+			final state radiation of the second
+			scattered parton which are a little different from
+			HINT1(51)-HINT1(54) due to the rearrangement of
+			the parton showers with energy and momentum 
+			conservation. 
+<DT>		HINT1(71):not used.
+<DT>		HINT1(72)-HINT1(75): <DD>Three parameters for the wood-saxon
+			projectile nuclear distribution and the normalization,
+			rho(x)=FNORM*(1.+W*(X/R)**2)/(1+EXP((X-R)/D)
+			R=HINT1(72), D=HINT1(73), W=HINT1(74), FNORM=HINT1(75).
+<DT>		HINT1(76)-HINT1(79): <DD>Three parameters for the wood-saxon
+			target nuclear distribution and the normalization,
+			rho(x)=FNORM*(1.+W*(X/R)**2)/(1+EXP((X-R)/D)
+			R=HINT1(76), D=HINT1(77), W=HINT1(78), FNORM=HINT1(79).
+<DT>		HINT1(80)-HINT1(100): <DD>The probability of 0-20 jets production
+			per pp interaction.
+
+<br><br>
+
+<DT>		IHNT2(1):<DD>The atomic number of the projectile nucleus
+			(=1 for hadron).
+<DT>		IHNT2(2):<DD>The charge number of the projectile nucleus, if the
+			projectile is a hadron it gives the charge of that
+			hadron.
+<DT>		IHNT2(3):<DD>The atomic number of the target nucleus(=1 for hadron).
+<DT>		IHNT2(4):<DD>The charge number of the terget nucleus,if the
+			target is a hadron it gives the charge of
+			that hadron.
+<DT>		IHNT2(5):The ID number of projectile hadrons(=0 for nucleus).
+<DT>		IHNT2(6):The ID number of target hadrons(=0 for nucleus).
+<DT>		IHNT2(7)-IHNT2(8):not used
+<DT>		IHNT2(9):<DD>The parton id of the first scattered parton in the 
+			specified hard collision per event with fixed PT.
+<DT>		IHNT2(10):<DD>The parton id of the second scattered parton in the 
+			specified hard collision per event with fixed PT.
+<DT>		IHNT2(11):<DD>The sequence number of projectile nucleon of the 
+			latest nucleon-nucleon interaction in the latest event.
+<DT>		IHNT2(12):<DD>The sequence number of target nucleon of the latest 
+			nucleon-nucleon interaction in the present event.
+<DT>		IHNT2(13):status of the latest soft LUND type exicitation:
+<DD>	 		=1 double diffractive;
+<DD>			=2 single diffractive 
+<DD>			=3 non-single diffractive.
+<DT>		IHNT2(14):<DD>The parton id of the first scattered parton in the 
+			latest hard collision of the latest event.
+<DT>		IHNT2(15):<DD>The parton id of the second scattered parton in the 
+			latest hard collision of the latest event.
+<DT>		IHNT2(16):<DD>parameter to indicate the initialization of the
+			the cross sections(=1). When given value 1
+			the initilization of pythia will used un-shadowed
+			structure functions to evaluate the maximum
+			cross sections.
+<DT>		IHNT2(17)-IHNT2(50):not used.
+</DL>
+
+
+	<br><br>
+	<A HREF="#main"> <B> Go back to the main manual </B> </A>
+
+<h4>
+ <A NAME=example> Example Programs </A>
+<A HREF="#main"> (Go back to the main manual) </A>
+</h4>
+
+
+	The following is an example program for calling HIJING. one should
+	include all the common blocks and the data values which are listed 
+	below in his own program.
+<hr size="1">
+<DL><DT>
+<DD>	CHARACTER FRAME*8,PROJ*8,TARG*8
+<DD>	COMMON/HIMAIN1/NATT,EATT,JATT,NT,NP,N0,N01,N10,N11
+<DD>	COMMON/HIMAIN2/KATT(130000,4),PATT(130000,4)
+<DT>C			********information of produced particles
+<DD>	COMMON/HIJJET1/NPJ(300),KFPJ(300,500),PJPX(300,500),PJPY(300,500)
+<DD>   &,PJPZ(300,500),PJPE(300,500),PJPM(300,500),NTJ(300),KFTJ(300,500)
+<DD>   &,PJTX(300,500),PJTY(300,500),PJTZ(300,500),PJTE(300,500),PJTM(300,500)
+<DD>	COMMON/HIJJET2/NSG,NJSG(900),IASG(900,3),K1SG(900,100),K2SG(900,100)
+<DD>   &,PXSG(900,100),PYSG(900,100),PZSG(900,100),PESG(900,100),PMSG(900,100)
+<DT>C			********information of produced partons
+<DD>	EFRM=200.0
+<DD>	FRAME='CMS'
+<DD>	PROJ='A'
+<DD>	TARG='A'
+<DD>	IAP=197
+<DD>	IZP=79
+<DD>	IAT=197
+<DD>	IZT=79
+<DD>	CALL HIJSET(EFRM,FRAME,PROJ,TARG,IAP,IZP,IAT,IZT)
+<DT>C			********Initialize HIJING
+
+<DD>	BMIN=0.0
+<DD>	BMAX=0.0
+<DD>	DO 2000 I_event=1,100
+
+<DD>	CALL HIJING(FRAME,BMIN,BMAX)
+C
+<DD>	DO 1000 I=1,NATT
+<DD>		IF(LUCHGE(KATT(I,1)).NE.0) THEN
+<DT>C		******** this select charged particles only
+<DT>C	        ******** information of produced particles
+<DT>C		******** is stored in common blocks HIMAIN1 and HIMAIN2 
+<DD>		ENDIF
+<DT>1000	CONTINUE
+
+<DT>2000	CONTINUE
+<DD>	STOP
+<DD>	END
+</DL>
+<hr size="1">
+		If one want to trig on jets with specified high P_T, the
+	following should be included in the program
+<DL>
+<DD>		IHPR2(3)=1(2,for direct photon production)
+<DD>		HIPR1(10)=P_T(-P_T for jets above P_T)
+</DL>
+	Because large P_T jet has very small cross sections, this will 
+	improve the simulation efficiency. The absolute cross section
+	can be obtained by multiplying the results with the total
+	cross section of such jet production in pp which is stored in
+	HINT1(59).
+
+ 
+
+<h4>
+ <A NAME=history> History of Updates </A>
+<A HREF="#main"> (Go back to the main manual) </A>
+</h4>
+
+ <b>     Version 1.34	</b> (January 5, 1998)
+<br><br>
+	Last modification on January 5, 1998. Two misstakes are corrected in
+     function G. A Misstake in the subroutine Parton is also corrected.
+     (These are pointed out by Yasushi Nara).
+<br><br>
+       Last modifcation on April 10, 1996. To conduct final
+       state radiation, PYTHIA reorganize the two scattered
+       partons and their final momenta will be a little
+       different. The summed total momenta of the partons
+       from the final state radiation are stored in HINT1(26-29)
+       and HINT1(36-39) which are little different from 
+       HINT1(21-24) and HINT1(41-44).
+
+<br><br>
+ <b>     Version 1.33	</b> (September 11, 1995)
+<br><br>
+
+       Modfication  on September 11, 1995: When HIJING and
+       PYTHIA are initialized, the shadowing is evaluated at
+       b=0 which is the maximum. This will cause overestimate
+       of shadowing for peripheral interactions. To correct this
+       problem, shadowing is set to zero when initializing. Then
+       use these maximum  cross section without shadowing as a
+       normalization of the Monte Carlo. This however increase
+       the computing time. IHNT2(16) is used to indicate whether
+       the sturcture function is called for (IHNT2(16)=1) initialization
+       or for (IHNT2(16)=0)normal collisions simulation
+<br><br>
+       Modification on Aagust 28, 1994: Two bugs associate
+       with the impact parameter dependence of the shadowing is
+       corrected.
+<br><br>
+
+<b>	Version 1.31	</b> (October 14, 1994)
+<br><br>
+
+	No major change has been made in this version. A bug 
+associated with triggering direct photon is corrected. This 
+problem was reported by Jim Carroll and Mike Beddo. Another 
+bug in tracing decay trees reported by Matt Bloomer was also 
+corrected.
+
+<br><br>
+	Another feature of triggered jet production (including 
+direct photon) in HIJING needs to be clarified here. The energy 
+and momentum stored in HINT1(21)-HINT1(25); HINT1(31)-HINT1(35); 
+HINT1(41)-HINT1(45); and HINT1(51)-HINT1(55) are the momenta 
+of the hard scattered partons in the lowest order calculation. 
+To include the higher order correction, final state radiations 
+are implemented. In this implementation, momentum and energy 
+are reshuffled so that the momentum and energy you find in the 
+finally produced parton or particle might not match those in 
+HINT1(21)-HINT1(55). But the momentum is still balanced for 
+the back-to-back jets (or jet and photon). So information in 
+HINT1(21)-HINT1(55) still give the right direction of the two 
+high pt jets.
+
+<br><br>
+
+<b> Version 1.30 </b> (July 15, 1994)
+
+<br><br>
+	The option to trig on heavy quark production (charm IHPR2(18)=0 
+or beauty IHPR2(18)=1) is added. To do this, set IHPR2(3)=3. For inclusive 
+production, one should reset HIPR1(10)=0.0. One can also trig larger pt
+QQbar production by giving HIPR1(10) a nonvanishing value. The mass 
+of the heavy quark in the calculation of the cross section (HINT1(59)-
+-HINT1(65)) is given by HIPR1(7) (the default is the charm mass D=1.5). 
+We also include a separate K-factor for heavy quark and direct photon 
+production by HIPR1(23)(D=2.0).
+
+<br><br>
+
+<b>	Version 1.20	</b> (May 24, 1994)
+
+<br><br>
+Beside some modifications to correct some minor errors, there three
+major changes since the first version.
+<DL><DD>
+	(1) An option is added to keep the information of all 
+particles including the decay chains. The switch of this option 
+is IHPR(21)=1 (default=0). The array KATT(130000,2) in 
+COMMON/HIMAIN2/ is expanded to KATT(130000,4). K(I,3) is the line 
+number of the parent particle of the current line which is produced 
+via a decay. KATT(I,4) is the status number of the particle: 11=particle
+which has decayed; 1=finally or directly produced particle.
+<br><br>
+<DD>
+	(2)Heavy flavor production processes through q+\bar{q}-->c+\bar{c}
+and g+g-->c+\bar{c} have been switched on. Charm production is the default, 
+B-quark option is IHPR2(18)=1 (default=0). Note that when B-quark production
+is switched on, charm quark is automatically off.
+<br><br>
+<DD>
+	(3) A subroutine  PROFILE(XB) is added to assist the simulation 
+of minimum biased events of proton-nucleus and nucleus-nucleus collisions. 
+Refer to the examples in hijing.tex for the simulation.
+</DL>
+
+	<br><br>
+	<A HREF="#main"> <B> Go back to the main manual </B> </A>
+
+
+</body>
+</html>
