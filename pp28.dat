@@ -1,0 +1,20 @@
+' energy per nucleon pair and ref frame '    28.  'CMS'
+' proj part, charge num and atomic num  '    'P'  1  1 
+' targ part, charge num and atomic num  '    'P'  1  1 
+' impact parameter range;  bmin & bmax  '    0.   0. 
+' number of events                      '    50000 
+' seed for the random number generator  '    1020034   
+' names of histogram and number files   ',  'pp28.paw','pp28.num'
+************************************************
+
+' izp, iap    proton         '      1    1
+' izp, iap    Be             '      4    9
+' izp, iap    Silicon        '     14   28
+' izt, iat    Sulfur         '     16   32
+' izp, iap    Copper         '     29   64
+' izt, iat    Silver         '     47  108
+' izp, iap    Xenon          '     54  130
+' izt, iap    Gold           '     79  197
+' izt, iat    Lead           '     82  208
+' izp, iap    Uranium        '     92  238
+

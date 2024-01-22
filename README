@@ -1,0 +1,14 @@
+HIJING/B-anti-B is composed of the following 4 source files hijing1.34.bb.f,
+hipyset.bb.f, junction.f and xhijing.bb.f.
+
+A sample Makefile is included for compilation of the program. Note that the
+link to the libraries will probably need to be changed.
+
+Once compiled, execute the command 'hijbb < input > output' to run the
+program.
+
+To simulate p+p collisions at sqrt{s} = 28 GeV or Pb+Pb collisions at E_lab =
+160 GeV/c use the following sample input files, pp28.dat and pbpb160l.dat,
+respectively.
+
+If you have any questions, please email me at svance@nt3.phys.columbia.edu.
