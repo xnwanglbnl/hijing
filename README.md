@@ -1,6 +1,6 @@
 # hijing
 
-**Links to [hijing1.42](https://github.com/xnwanglbnl/hijing/tree/hijing1.42) branch and [hijing2.0](https://github.com/xnwanglbnl/hijing/tree/hijing2.0) branch**
+**Links to [hijing1.42](https://github.com/xnwanglbnl/hijing/tree/hijing1.42) branch and [hijing2.0](https://github.com/xnwanglbnl/hijing/tree/hijing2.0) branch  https://github.com/xnwanglbnl/hijing/tree/hijingBBar**
 
  Documentation and instruction can be found here: https://github.com/xnwanglbnl/hijing/wiki
  
