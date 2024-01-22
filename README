@@ -11,4 +11,7 @@ To simulate p+p collisions at sqrt{s} = 28 GeV or Pb+Pb collisions at E_lab =
 160 GeV/c use the following sample input files, pp28.dat and pbpb160l.dat,
 respectively.
 
-If you have any questions, please email me at svance@nt3.phys.columbia.edu.
+
+
+The program would require cernlib libraries, that can be obtained from
+https://github.com/apc-llc/cernlib
