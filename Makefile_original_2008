@@ -1,0 +1,11 @@
+OBJ = xhijing.bb2.1.o hijing1.382.bb2.1.o hipyset.bb2.1.o junction2.1.o
+PROG = hbb2test
+
+FC = f77 -m32 -O  
+LIBS = -L/usr/libexec/CERNLIB/2005/lib -lkernlib -lpawlib -lpacklib_noshift -lmathlib
+
+#########################
+all: $(PROG)
+
+$(PROG): $(OBJ)
+	$(FC) -o $@ $(OBJ) $(LIBS)

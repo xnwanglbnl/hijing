@@ -1,0 +1,28 @@
+' energy per nucleon pair and ref frame '    200.0  'CMS'
+' proj part, charge num and atomic num  '    'A' 79 197
+' targ part, charge num and atomic num  '    'A' 79 197 
+' impact parameter range;  bmin & bmax  '     0.05 3.12
+' number of events                      '    1000
+' seed for the random number generator  '    -12345678
+' names of histogram and number files   '  'auau200test.paw','auau200test.num'
+' Turn on:1,off:0 junction, sig_junc    '   0, 17.
+' Turn on:1,off:0 JJbar pt, sig_JJ      '   1, 16.
+' JJbar qq pt enhancement fac           '   3.
+************************************************
+' izp, iap    proton         '      1    1
+' izp, iap    Be             '      4    9
+' izp, iap    Silicon        '     14   28
+' izt, iat    Sulfur         '     16   32
+' izp, iap    Copper         '     29   64
+' izt, iat    Silver         '     47  108
+' izp, iap    Xenon          '     54  130
+' izt, iap    Gold           '     79  197
+' izt, iat    Lead           '     82  208
+' izp, iap    Uranium        '     92  238
+
+
+
+
+
+
+
